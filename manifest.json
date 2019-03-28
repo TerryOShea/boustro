@@ -2,7 +2,7 @@
     "name": "Boustro",
     "version": "1.0",
     "description": "An extension to transform text on web pages into boustrophedons.",
-    "permissions": ["storage"],
+    "permissions": ["activeTab", "storage"],
     "background": {
         "scripts": ["background.js"],
         "persistent": false
@@ -23,5 +23,8 @@
         "48": "images/boustro48.png",
         "128": "images/boustro128.png"
     },
+    "web_accessible_resources": [
+        "styles.css"
+    ],
     "manifest_version": 2
 }

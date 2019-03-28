@@ -1,0 +1,29 @@
+.flip {
+  /* thanks, https://priteshgupta.com/2011/09/flip-or-reverse-text-using-css/ */
+  -webkit-transform:rotate(-180deg);
+  -moz-transform:rotate(-180deg);
+  -o-transform:rotate(-180deg);
+  transform:rotate(-180deg);
+  ms-filter:"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+
+.boustro-line {
+  display: inline-block;
+  text-align: justify;
+  text-align-last: left;
+  height: 1.5em;
+  overflow: hidden;
+  width: 100%;
+}
+
+.boustro-line::after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+  line-height: 0;
+}
+
+p > .boustro-line:last-of-type {
+  text-align: left;
+}
