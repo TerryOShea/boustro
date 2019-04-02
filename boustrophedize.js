@@ -1,16 +1,39 @@
 const paragraphs = document.getElementsByTagName('p');
 
-for (let p of paragraphs) {
-    p.innerHTML = p.innerHTML
+const spanifyWords = words => (
+    words
         .split(/\s/)
-        .map(word => `<span class="boustro-word">${word}</span>`)
-        .join(' ');
+        .map(word => {
+            // handles a hyphenated word like "daisy-chain" that straddles two lines
+            if (word.includes("-")) {
+                const split = word.split("-");
+                return split.map((subword, i) => `<span class="boustro-word">${subword}${i + 1 === split.length ? "" : "-"}</span>`).join("");
+            } else {
+                return `<span class="boustro-word">${word.split("-").join("-")}</span>`;
+            }
+        })
+        .join(' ')
+);
+
+for (let p of paragraphs) {
+    const wordSpans = [];
+  
+    for (let node of p.childNodes) {
+        if (node.nodeName === "#text") {
+            wordSpans.push(spanifyWords(node.textContent));
+        } else {
+            wordSpans.push(`<span class="boustro-word">${node}</span>`);
+        }
+    }
+  
+    p.innerHTML = wordSpans.join(" ");
 
     const spans = p.getElementsByClassName('boustro-word');
     const lines = [];
     let line = [];
     let lineOffset;
 
+    let prevWordHyphenated = false;
     for (let s of spans) {
         const currentOffset = s.offsetTop;
         if (lineOffset === undefined) {
@@ -20,8 +43,17 @@ for (let p of paragraphs) {
             lines.push(line.join(" "));
             line = [];
             lineOffset = currentOffset;
+            prevWordHyphenated = false;
         }
-        line.push(s.innerHTML);
+      
+        // handling the hyphenated word case
+        if (prevWordHyphenated) {
+            line[line.length - 1] = line[line.length - 1] + s.innerHTML;
+        } else {
+            line.push(s.innerHTML);
+        }
+      
+        prevWordHyphenated = s.innerHTML.endsWith("-");
     }
     if (line.length) {
         lines.push(line.join(" "));
