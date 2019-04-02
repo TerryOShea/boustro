@@ -1,5 +1,10 @@
 const paragraphs = document.getElementsByTagName('p');
 
+// TODO: loading spinner?
+// TODO: break up ems, bs, as into multiple tags
+// TODO: listen for screen size change, then reload
+// TODO: more space between paragraphs
+
 const spanifyWords = words => (
     words
         .split(/\s/)
@@ -9,20 +14,22 @@ const spanifyWords = words => (
                 const split = word.split("-");
                 return split.map((subword, i) => `<span class="boustro-word">${subword}${i + 1 === split.length ? "" : "-"}</span>`).join("");
             } else {
-                return `<span class="boustro-word">${word.split("-").join("-")}</span>`;
+                return `<span class="boustro-word">${word}</span>`;
             }
         })
         .join(' ')
 );
+
+const normalizeWhitespace = text => text.trim().replace(/\s+/g, ' ');
 
 for (let p of paragraphs) {
     const wordSpans = [];
   
     for (let node of p.childNodes) {
         if (node.nodeName === "#text") {
-            wordSpans.push(spanifyWords(node.textContent));
+            wordSpans.push(spanifyWords(normalizeWhitespace(node.textContent)));
         } else {
-            wordSpans.push(`<span class="boustro-word">${node}</span>`);
+            wordSpans.push(`<span class="boustro-word">${node.outerHTML}</span>`);
         }
     }
   

@@ -12,6 +12,7 @@
   display: inline-block;
   text-align: justify;
   text-align-last: left;
+  text-indent: 0;
   height: 1.5em;
   overflow: hidden;
   width: 100%;
